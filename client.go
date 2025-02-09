@@ -130,11 +130,12 @@ func (a APIMethod[R, T]) Do(c Doer, input ...any) (*T, error) {
 		baseURL = b.BaseURL()
 	}
 	output := new(T)
+	args, others := splitArgs(string(a), input...)
 	resp, err := makeRequest(
 		c,
 		method.Method(),
-		fmt.Sprintf(baseURL+string(a), input...),
-		input..., // is there header/body handling required?
+		fmt.Sprintf(baseURL+string(a), args...),
+		others..., // is there header/body handling required?
 	)
 	if err != nil {
 		return nil, err
